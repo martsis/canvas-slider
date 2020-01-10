@@ -344,7 +344,8 @@ class CanvasSlideshow{
                 }
             }
             
-            slide.draw(intervalX, intervalY);
+            slide.draw(intervalX / (this.width / slide.canvas.offsetWidth), intervalY / (this.height / slide.canvas.offsetHeight));
+
             if (direction == "down" && (intervalY > slide.height + radius || intervalX > slide.width + this._pattern.width)){
                 intervalX -= this._pattern.width - this._pattern.blur * 2;
                 direction = 'up';
