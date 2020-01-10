@@ -88,8 +88,11 @@ class Slide {
     }
 
     drow(x, y){
-        const imageDataX = x - this.pattern.width / 2;
-        const imageDataY = y - this.pattern.height / 2;
+        const positionX = this.width / this.canvas.offsetWidth * x;
+        const positionY = this.height / this.canvas.offsetHeight * y;
+        
+        const imageDataX = positionX - this.pattern.width / 2;
+        const imageDataY = positionY - this.pattern.height / 2;
         const imageData = this._ctx.getImageData(imageDataX, imageDataY, this.pattern.width, this.pattern.height);
         
         let count = 0;
@@ -111,9 +114,8 @@ class Slide {
 }
 
 class CanvasSlideshow{
-    constructor({selector, width, height, slides, pattern}){
-        this.selector = selector;
-        this._element = document.querySelector(selector);
+    constructor({container, width, height, slides, pattern}){
+        this._element = document.querySelector(container);
         this._pattern = new Pattern(pattern);
         this.width = width;
         this.height = height;
@@ -170,7 +172,7 @@ class CanvasSlideshow{
         if (this.currentIndex >= this.slides.length){
             this.currentIndex = 0;
         }
-        
+
         this.nextIndex = this.currentIndex;
         this.nextIndex++;
     
@@ -227,7 +229,7 @@ class CanvasSlideshow{
 
 document.addEventListener('DOMContentLoaded', function(){
     const slideshowParams = {
-        selector: '#slideshow',
+        container: '#slideshow',
         slides: [
             'img/slide-1.jpg',
             'img/slide-2.jpg',
