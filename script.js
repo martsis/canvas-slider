@@ -6,143 +6,243 @@ const PATTERN_WIDTH = 320;
 const PATTERN_HEIGHT = 320;
 const PATTERN_BLUR = 10;
 
-class Slide {
-    constructor({url}){
-        this.url = url;
-        this.image = new Image();
-        this.image.src = this.url;
+class Pattern{
+    constructor({width, height, blur}){
+        this.width = width;
 
-        this._canvas = document.createElement('canvas');
-        this._ctx = this._canvas.getContext('2d');
+        if (typeof height != 'undefined'){
+            this.height = height;
+        } else {
+            this.height = width;
+        }
+
+        this.blur = blur;
+        this.data = [];
         
-        this.image.addEventListener('load', () => {
-            this._canvas.height = this.image.height;
-            this._canvas.width = this.image.width;
-            this._ctx.drawImage(this.image, 0, 0);
-        });
-    }
-}
-
-class DrowSlider {
-    constructor({}){
-
-    }
-}
-
-const pattenr = patternInit(PATTERN_WIDTH, PATTERN_HEIGHT, PATTERN_BLUR);
-
-let mouseDownState = false;
-
-canvas.width = CANVAS_WIDTH;
-canvas.height = CANVAS_HEIGHT;
-
-const ctx = canvas.getContext('2d');
-
-const img1 = new Image();
-
-img1.onload = function(){
-    ctx.drawImage(img1, 0, 0);
-};
-
-img1.src = 'img/slide-1.jpg';
-
-canvas.addEventListener('mousedown', e => {
-    mouseDownState = true;
-    drow(e.offsetX, e.offsetY);
-});
-canvas.addEventListener('mouseup', e => {
-    mouseDownState = false;
-});
-canvas.addEventListener('mousemove', e => {
-    if (mouseDownState){
-        drow(e.offsetX, e.offsetY);
-    }
-});
-
-function animation(canvasWidth, canvasHeight, patternWidth, patternHeight, patternBlur){
-    const radius = patternWidth / 2 - patternBlur;
-    let intervalY = -radius;
-    let intervalX = canvasWidth - radius;
-    let direction = 'down';
-    let iteration = 0;
-    const updateCanvas = setInterval(function(){
-        if (iteration > canvasWidth / patternWidth * 2){
-            console.log(`done (${iteration})`);
-            clearInterval(updateCanvas);
-        }
-        
-        drow(intervalX, intervalY);
-        if (direction == "down" && (intervalY > canvasHeight + radius || intervalX > canvasWidth + patternWidth)){
-            intervalX -= patternWidth - patternBlur * 2;
-            direction = 'up';
-            iteration++;
-        }
-
-        if (direction == "up" && (intervalY < -radius || intervalX < 0)) {
-            intervalX -= patternWidth - patternBlur * 2;
-            direction = 'down';
-            iteration++;
-        }
-
-        if (direction == "down"){
-            intervalY += canvasHeight / 20;
-            intervalX += canvasWidth / 20;
-        } 
-
-        if (direction == "up") {
-            intervalY -= canvasHeight / 20;
-            intervalX -= canvasWidth / 20;
-        }
-
-        printElement.textContent = `y: ${intervalY}; x: ${intervalX}; direction: ${direction}`;
-        
-    }, 16);
-}
-
-function drow(x, y){
-    const imageData = ctx.getImageData(x - PATTERN_WIDTH / 2, y - PATTERN_HEIGHT / 2, PATTERN_WIDTH, PATTERN_HEIGHT);
+        const _centerX = (this.width - this.width % 2) / 2;
+        const _centerY = (this.height - this.height % 2) / 2;
+        const _radius = (_centerX < _centerY) ? _centerX : _centerY;
     
-    let count = 0;
-
-    for (let i = 3; i < imageData.data.length; i += 4){
-        const x = count % PATTERN_WIDTH;
-        const y = (count - count % PATTERN_WIDTH) / PATTERN_WIDTH;
-        
-        count++;
-
-        if (imageData.data[i] > pattenr[y][x]){
-            imageData.data[i] = pattenr[y][x];
-        }
-
-    }
-
-    ctx.putImageData(imageData, x - PATTERN_WIDTH / 2, y - PATTERN_HEIGHT / 2);
-}
-
-function patternInit(width, height, blur){
-    let pattenr = [];
+        for (let i = 0; i < this.width; i++){
+            this.data[i] = [];
     
-    const centerX = (width - width % 2) / 2;
-    const centerY = (height - height % 2) / 2;
-    const radius = (centerX < centerY) ? centerX : centerY;
-
-    for (let i = 0; i < width; i++){
-        pattenr[i] = [];
-
-        for (let j = 0; j < height; j++){
-            const distance = Math.sqrt(Math.pow(i - centerX, 2) + Math.pow(j - centerY, 2));
-
-            if (distance <= radius) {
-                if (distance > radius - blur) {
-                    pattenr[i][j] = (distance - (radius - blur)) / blur * 255;
+            for (let j = 0; j < this.height; j++){
+                const distance = Math.sqrt(Math.pow(i - _centerX, 2) + Math.pow(j - _centerY, 2));
+    
+                if (distance <= _radius) {
+                    if (distance > _radius - this.blur) {
+                        this.data[i][j] = (distance - (_radius - this.blur)) / this.blur * 255;
+                    } else {
+                        this.data[i][j] = 0;
+                    }
                 } else {
-                    pattenr[i][j] = 0;
+                    this.data[i][j] = 255;
                 }
-            } else {
-                pattenr[i][j] = 255;
             }
         }
     }
-
-    return pattenr;
 }
+
+class Slide {
+    constructor({url, width, height, pattern}){
+        this.url = url;
+        this.width = width;
+        this.height = height;
+        this.image = new Image();
+        this.image.src = this.url;
+        this._mouseDownState = false;
+        this.pattern = pattern;
+        this._backup;
+
+        this.canvas = document.createElement('canvas');
+        this._ctx = this.canvas.getContext('2d');
+        
+        this.image.addEventListener('load', () => {
+            this.canvas.height = this.image.height;
+            this.canvas.width = this.image.width;
+            this._ctx.drawImage(this.image, 0, 0);
+
+            this.save();
+        });
+
+        this.canvas.addEventListener('mousedown', e => {
+            this._mouseDownState = true;
+            this.drow(e.offsetX, e.offsetY);
+        });
+        this.canvas.addEventListener('mouseup', () => {
+            this._mouseDownState = false;
+        });
+        this.canvas.addEventListener('mousemove', e => {
+            if (this._mouseDownState){
+                this.drow(e.offsetX, e.offsetY);
+            }
+        });
+    }
+
+    save(){
+        this._backup = this._ctx.getImageData(0, 0, this.width, this.height);
+    }
+
+    restore(){
+        this._ctx.putImageData(this._backup, 0, 0);
+    }
+
+    drow(x, y){
+        const imageDataX = x - this.pattern.width / 2;
+        const imageDataY = y - this.pattern.height / 2;
+        const imageData = this._ctx.getImageData(imageDataX, imageDataY, this.pattern.width, this.pattern.height);
+        
+        let count = 0;
+    
+        for (let i = 3; i < imageData.data.length; i += 4){
+            const x = count % this.pattern.width;
+            const y = (count - count % this.pattern.height) / this.pattern.width;
+            
+            count++;
+    
+            if (imageData.data[i] > this.pattern.data[y][x]){
+                imageData.data[i] = this.pattern.data[y][x];
+            }
+    
+        }
+    
+        this._ctx.putImageData(imageData, imageDataX, imageDataY);
+    }
+}
+
+class CanvasSlideshow{
+    constructor({selector, width, height, slides, pattern}){
+        this.selector = selector;
+        this._element = document.querySelector(selector);
+        this._pattern = new Pattern(pattern);
+        this.width = width;
+        this.height = height;
+        this.slides = [];
+        this.currentIndex = 0;
+        this.nextIndex = this.currentIndex + 1;
+        
+        this._slideshowContainer = document.createElement('div');
+        this._slideshowContainer.className = 'canvasSlideshow-container';
+        this._element.append(this._slideshowContainer);
+
+        slides.forEach((url, index) => {
+            const slide = new Slide({url, width: this.width, height: this.height, pattern: this._pattern});
+            
+            const slideContainer = document.createElement('div');
+            slideContainer.className = 'canvasSlideshow-slide';
+            slideContainer.append(slide.canvas);
+
+            this.slides.push({
+                slide,
+                container: slideContainer
+            });
+        });
+
+        this.slides.forEach((slide, index) => {
+            this._slideshowContainer.append(slide.container);
+        });
+
+        this.indexUpdate();
+    }
+
+    indexUpdate(){
+        this.slides.forEach((item, index) => {
+            item.container.style.zIndex = 980;
+
+            if (index == this.currentIndex) {
+                item.container.style.zIndex = 1000;
+            }
+
+            if (index == this.nextIndex) {
+                item.container.style.zIndex = 990;
+            }
+        });
+    }
+
+    next(){
+        this.animation(this.slides[this.currentIndex].slide);
+        
+    }
+    
+    _nextFinish(){
+        this.currentIndex++;
+        
+        if (this.currentIndex >= this.slides.length){
+            this.currentIndex = 0;
+        }
+        
+        this.nextIndex = this.currentIndex;
+        this.nextIndex++;
+    
+        if (this.nextIndex >= this.slides.length){
+            this.nextIndex = 0;
+        }
+
+        this.indexUpdate();
+
+        this.slides.forEach(item => {
+            item.slide.restore();
+        })
+    }
+
+    animation(slide){
+        const radius = this._pattern.width / 2 - this._pattern.blur;
+        let intervalY = -radius;
+        let intervalX = this.width - radius;
+        let direction = 'down';
+        let iteration = 0;
+        const updateCanvas = setInterval(() => {
+            if (iteration > this.width / this._pattern.width * 2){
+                clearInterval(updateCanvas);
+                this._nextFinish();
+            }
+            
+            slide.drow(intervalX, intervalY);
+            if (direction == "down" && (intervalY > this.height + radius || intervalX > this.width + this._pattern.width)){
+                intervalX -= this._pattern.width - this._pattern.blur * 2;
+                direction = 'up';
+                iteration++;
+            }
+    
+            if (direction == "up" && (intervalY < -radius || intervalX < 0)) {
+                intervalX -= this._pattern.width - this._pattern.blur * 2;
+                direction = 'down';
+                iteration++;
+            }
+    
+            if (direction == "down"){
+                intervalY += this.height / 20;
+                intervalX += this.width / 20;
+            } 
+    
+            if (direction == "up") {
+                intervalY -= this.height / 20;
+                intervalX -= this.width / 20;
+            }
+        }, 16);
+    }
+}
+
+
+
+document.addEventListener('DOMContentLoaded', function(){
+    const slideshowParams = {
+        selector: '#slideshow',
+        slides: [
+            'img/slide-1.jpg',
+            'img/slide-2.jpg',
+            'img/slide-3.jpg'
+        ],
+        width: 680,
+        height: 880,
+        pattern: {
+            width: 320,
+            height: 320,
+            blur: 10
+        }
+    }
+
+    const canvasSlideshow = new CanvasSlideshow(slideshowParams);
+
+    window.slideshow = canvasSlideshow;
+});
