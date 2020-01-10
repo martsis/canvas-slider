@@ -179,6 +179,9 @@ class CanvasSlideshow{
 
         slides.forEach(url => {
             const slide = new Slide({url, width: this.width, height: this.height, pattern: this._pattern});
+            slide.image.addEventListener('load', () => {
+                this.resize();
+            });
             
             const slideContainer = document.createElement('div');
             slideContainer.className = 'canvasSlideshow-slide';
@@ -194,11 +197,15 @@ class CanvasSlideshow{
             this._slideshowContainer.append(slide.container);
         });
 
-        this.indexUpdateStart();
-        this.indexUpdateFinish();
+        this._indexUpdateStart();
+        this._indexUpdateFinish();
+
+        window.addEventListener('resize', () => {
+            this.resize();
+        });
     }
 
-    indexUpdateStart(){
+    _indexUpdateStart(){
         this.slides.forEach((item, index) => {
             if (index == this.currentIndex) {
                 item.container.style.zIndex = 1000;
@@ -210,12 +217,17 @@ class CanvasSlideshow{
         });
     }
 
-    indexUpdateFinish(){
+    _indexUpdateFinish(){
         this.slides.forEach((item, index) => {
             if (index != this.currentIndex && index != this.nextIndex){
                 item.container.style.zIndex = 0;
             }
         });
+    }
+
+    resize(){
+        this._containerHeight = this.slides[0].container.offsetHeight;
+        this._element.style.height = `${this._containerHeight}px`;
     }
 
     next(){
@@ -238,7 +250,7 @@ class CanvasSlideshow{
             this.nextIndex = 0;
         }
 
-        this.indexUpdateStart();
+        this._indexUpdateStart();
     }
 
     _prevStart(){
@@ -249,7 +261,7 @@ class CanvasSlideshow{
             this.nextIndex = this.slides.length - 1;
         }
 
-        this.indexUpdateStart();
+        this._indexUpdateStart();
     }
 
     _prevFinish(){
@@ -259,7 +271,7 @@ class CanvasSlideshow{
             this.currentIndex = this.slides.length - 1;
         }
 
-        this.indexUpdateFinish();
+        this._indexUpdateFinish();
 
         this.slides.forEach(item => {
             item.slide.restore();
@@ -273,7 +285,7 @@ class CanvasSlideshow{
             this.currentIndex = 0;
         }
 
-        this.indexUpdateFinish();
+        this._indexUpdateFinish();
 
         this.slides.forEach((item, index) => {
             item.slide.restore();
