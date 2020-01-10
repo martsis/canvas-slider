@@ -156,7 +156,7 @@ class Slide {
 }
 
 class CanvasSlideshow{
-    constructor({container, width, height, slides, pattern, nextBtn, prevBtn}){
+    constructor({container, width, height, slides, pattern, nextBtn, prevBtn, drawn}){
         if (typeof container == 'undefined'){
             console.error('Param "container" is undefined');
             return;
@@ -180,6 +180,10 @@ class CanvasSlideshow{
         if (typeof prevBtn != 'undefined'){
             this.prevBtn = document.querySelector(prevBtn);
         }
+
+        if (typeof drawn != 'undefined'){
+            this.drawn = drawn;
+        }
         
         this._pattern = new Pattern(pattern);
 
@@ -192,7 +196,7 @@ class CanvasSlideshow{
         this._element.append(this._slideshowContainer);
 
         slides.forEach(url => {
-            const slide = new Slide({url, width: this.width, height: this.height, pattern: this._pattern});
+            const slide = new Slide({url, width: this.width, height: this.height, pattern: this._pattern, drawn: this.drawn});
             slide.image.addEventListener('load', () => {
                 this.resize();
             });
@@ -384,7 +388,8 @@ document.addEventListener('DOMContentLoaded', function(){
             width: 320,
             height: 320,
             blur: 10
-        }
+        },
+        drawn: true
     }
 
     const canvasSlideshow = new CanvasSlideshow(slideshowParams);
