@@ -156,18 +156,32 @@ class Slide {
 }
 
 class CanvasSlideshow{
-    constructor({container, width, height, slides, pattern}){
+    constructor({container, width, height, slides, pattern, nextBtn, prevBtn}){
+        if (typeof container == 'undefined'){
+            console.error('Param "container" is undefined');
+            return;
+        }
+        
         this._element = document.querySelector(container);
-        this._pattern = new Pattern(pattern);
         this.animating = false;
-
+        
         if (typeof width != 'undefined'){
             this.width = width;
         }
-
+        
         if (typeof height != 'undefined'){
             this.height = height;
         }
+
+        if (typeof nextBtn != 'undefined'){
+            this.nextBtn = document.querySelector(nextBtn);
+        }
+
+        if (typeof prevBtn != 'undefined'){
+            this.prevBtn = document.querySelector(prevBtn);
+        }
+        
+        this._pattern = new Pattern(pattern);
 
         this.slides = [];
         this.currentIndex = 0;
@@ -203,6 +217,20 @@ class CanvasSlideshow{
         window.addEventListener('resize', () => {
             this.resize();
         });
+
+        if (this.nextBtn){
+            this.nextBtn.addEventListener('click', e => {
+                e.preventDefault();
+                this.next();
+            });
+        }
+
+        if (this.prevBtn){
+            this.prevBtn.addEventListener('click', e => {
+                e.preventDefault();
+                this.prev();
+            });
+        }
     }
 
     _indexUpdateStart(){
@@ -343,8 +371,8 @@ class CanvasSlideshow{
 document.addEventListener('DOMContentLoaded', function(){
     const slideshowParams = {
         container: '#slideshow',
-        next: '#next',
-        prev: '#prev',
+        nextBtn: '#next',
+        prevBtn: '#prev',
         slides: [
             'http://placekitten.com/800/480',
             'http://placekitten.com/800/800',
