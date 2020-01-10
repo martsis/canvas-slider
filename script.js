@@ -44,37 +44,75 @@ class Pattern{
 }
 
 class Slide {
-    constructor({url, width, height, pattern}){
+    constructor({url, width, height, pattern, drawn}){
         this.url = url;
-        this.width = width;
-        this.height = height;
         this.image = new Image();
+        this.image.crossOrigin = 'anonymous';
         this.image.src = this.url;
         this._mouseDownState = false;
         this.pattern = pattern;
         this._backup;
 
+        if (typeof drawn != 'undefined'){
+            this.drawn = drawn;
+        } else {
+            this.drawn = false;
+        }
+
         this.canvas = document.createElement('canvas');
         this._ctx = this.canvas.getContext('2d');
         
-        this.image.addEventListener('load', () => {
-            this.canvas.height = this.image.height;
-            this.canvas.width = this.image.width;
-            this._ctx.drawImage(this.image, 0, 0);
+        this.image.addEventListener('load', e => {
+            if (typeof width != 'undefined'){
+                this.width = width;
+            } else {
+                this.width = e.target.width;
+            }
+
+            if (typeof height != 'undefined') {
+                this.height = height;
+            } else {
+                this.height = e.target.height;
+            }
+
+            this.canvas.height = this.height;
+            this.canvas.width = this.width;
+            
+            
+            const canvasRatio = this.width / this.height;
+            const imageRatio = e.target.width / e.target.height;
+
+            
+            if (imageRatio > canvasRatio){
+                const imagePositionX = -(e.target.width - e.target.height * canvasRatio) / 2 * (this.height / e.target.height);
+                //const imagePositionX = -(e.target.width - this.width * (e.target.height / this.height)) / 2;
+                //console.log(`cw: ${this.width}; ch: ${this.height}; w: ${e.target.width}; h: ${e.target.height}; r: ${imageRatio}; cr: ${canvasRatio}`, e.target.width * (e.target.height / this.height));
+                const imageWidth = e.target.width * (this.height / e.target.height);
+                this._ctx.drawImage(e.target, imagePositionX, 0, imageWidth, this.height);
+            } else {
+                const imagePositionY = -(e.target.height - this.height * (e.target.width / this.width)) / 2;
+                const imageHeight = e.target.height * (this.width / e.target.width);
+                this._ctx.drawImage(e.target, 0, imagePositionY, this.width, imageHeight);
+            }
+
 
             this.save();
         });
 
         this.canvas.addEventListener('mousedown', e => {
-            this._mouseDownState = true;
-            this.drow(e.offsetX, e.offsetY);
+            if (this.drawn){
+                this._mouseDownState = true;
+                this.draw(e.offsetX, e.offsetY);
+            }
         });
         this.canvas.addEventListener('mouseup', () => {
-            this._mouseDownState = false;
+            if (this.drawn){
+                this._mouseDownState = false;
+            }
         });
         this.canvas.addEventListener('mousemove', e => {
-            if (this._mouseDownState){
-                this.drow(e.offsetX, e.offsetY);
+            if (this._mouseDownState && this.drawn){
+                this.draw(e.offsetX, e.offsetY);
             }
         });
     }
@@ -87,7 +125,11 @@ class Slide {
         this._ctx.putImageData(this._backup, 0, 0);
     }
 
-    drow(x, y){
+    resize(){
+        this.canvas.width 
+    }
+
+    draw(x, y){
         const positionX = this.width / this.canvas.offsetWidth * x;
         const positionY = this.height / this.canvas.offsetHeight * y;
         
@@ -117,8 +159,16 @@ class CanvasSlideshow{
     constructor({container, width, height, slides, pattern}){
         this._element = document.querySelector(container);
         this._pattern = new Pattern(pattern);
-        this.width = width;
-        this.height = height;
+        this.animating = false;
+
+        if (typeof width != 'undefined'){
+            this.width = width;
+        }
+
+        if (typeof height != 'undefined'){
+            this.height = height;
+        }
+
         this.slides = [];
         this.currentIndex = 0;
         this.nextIndex = this.currentIndex + 1;
@@ -127,7 +177,7 @@ class CanvasSlideshow{
         this._slideshowContainer.className = 'canvasSlideshow-container';
         this._element.append(this._slideshowContainer);
 
-        slides.forEach((url, index) => {
+        slides.forEach(url => {
             const slide = new Slide({url, width: this.width, height: this.height, pattern: this._pattern});
             
             const slideContainer = document.createElement('div');
@@ -140,17 +190,16 @@ class CanvasSlideshow{
             });
         });
 
-        this.slides.forEach((slide, index) => {
+        this.slides.forEach(slide => {
             this._slideshowContainer.append(slide.container);
         });
 
-        this.indexUpdate();
+        this.indexUpdateStart();
+        this.indexUpdateFinish();
     }
 
-    indexUpdate(){
+    indexUpdateStart(){
         this.slides.forEach((item, index) => {
-            item.container.style.zIndex = 980;
-
             if (index == this.currentIndex) {
                 item.container.style.zIndex = 1000;
             }
@@ -161,9 +210,60 @@ class CanvasSlideshow{
         });
     }
 
+    indexUpdateFinish(){
+        this.slides.forEach((item, index) => {
+            if (index != this.currentIndex && index != this.nextIndex){
+                item.container.style.zIndex = 0;
+            }
+        });
+    }
+
     next(){
+        if (this.animating) return;
+        this._nextStart();
         this.animation(this.slides[this.currentIndex].slide);
+    }
+
+    prev(){
+        if (this.animating) return;
+        this._prevStart();
+        this.animation(this.slides[this.currentIndex].slide, true);
+    }
+
+    _nextStart(){
+        this.nextIndex = this.currentIndex;
+        this.nextIndex++;
+    
+        if (this.nextIndex >= this.slides.length){
+            this.nextIndex = 0;
+        }
+
+        this.indexUpdateStart();
+    }
+
+    _prevStart(){
+        this.nextIndex = this.currentIndex;
+        this.nextIndex--;
+    
+        if (this.nextIndex < 0){
+            this.nextIndex = this.slides.length - 1;
+        }
+
+        this.indexUpdateStart();
+    }
+
+    _prevFinish(){
+        this.currentIndex--;
         
+        if (this.currentIndex < 0){
+            this.currentIndex = this.slides.length - 1;
+        }
+
+        this.indexUpdateFinish();
+
+        this.slides.forEach(item => {
+            item.slide.restore();
+        })
     }
     
     _nextFinish(){
@@ -173,34 +273,35 @@ class CanvasSlideshow{
             this.currentIndex = 0;
         }
 
-        this.nextIndex = this.currentIndex;
-        this.nextIndex++;
-    
-        if (this.nextIndex >= this.slides.length){
-            this.nextIndex = 0;
-        }
+        this.indexUpdateFinish();
 
-        this.indexUpdate();
-
-        this.slides.forEach(item => {
+        this.slides.forEach((item, index) => {
             item.slide.restore();
         })
     }
 
-    animation(slide){
+    animation(slide, prev){
         const radius = this._pattern.width / 2 - this._pattern.blur;
         let intervalY = -radius;
-        let intervalX = this.width - radius;
+        let intervalX = slide.width - radius;
         let direction = 'down';
         let iteration = 0;
+        this.animating = true;
         const updateCanvas = setInterval(() => {
-            if (iteration > this.width / this._pattern.width * 2){
+            if (iteration > slide.width / this._pattern.width * 2){
                 clearInterval(updateCanvas);
-                this._nextFinish();
+
+                this.animating = false;
+
+                if (typeof prev == 'undefined'){
+                    this._nextFinish();
+                } else {
+                    this._prevFinish();
+                }
             }
             
-            slide.drow(intervalX, intervalY);
-            if (direction == "down" && (intervalY > this.height + radius || intervalX > this.width + this._pattern.width)){
+            slide.draw(intervalX, intervalY);
+            if (direction == "down" && (intervalY > slide.height + radius || intervalX > slide.width + this._pattern.width)){
                 intervalX -= this._pattern.width - this._pattern.blur * 2;
                 direction = 'up';
                 iteration++;
@@ -213,13 +314,13 @@ class CanvasSlideshow{
             }
     
             if (direction == "down"){
-                intervalY += this.height / 20;
-                intervalX += this.width / 20;
+                intervalY += slide.height / 20;
+                intervalX += slide.width / 20;
             } 
     
             if (direction == "up") {
-                intervalY -= this.height / 20;
-                intervalX -= this.width / 20;
+                intervalY -= slide.height / 20;
+                intervalX -= slide.width / 20;
             }
         }, 16);
     }
@@ -230,13 +331,15 @@ class CanvasSlideshow{
 document.addEventListener('DOMContentLoaded', function(){
     const slideshowParams = {
         container: '#slideshow',
+        next: '#next',
+        prev: '#prev',
         slides: [
-            'img/slide-1.jpg',
-            'img/slide-2.jpg',
-            'img/slide-3.jpg'
+            'http://placekitten.com/800/480',
+            'http://placekitten.com/800/800',
+            'http://placekitten.com/480/800',
         ],
-        width: 680,
-        height: 880,
+        width: 800,
+        height: 640,
         pattern: {
             width: 320,
             height: 320,
