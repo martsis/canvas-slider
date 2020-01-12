@@ -1,0 +1,23 @@
+{
+  "name": "canvas-slider",
+  "version": "1.0.0",
+  "description": "Canvas slideshow",
+  "main": "./src/canvas-slideshow.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martsis/canvas-slider.git"
+  },
+  "keywords": [
+    "canvas",
+    "slideshow"
+  ],
+  "author": "Alexander Martsis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/martsis/canvas-slider/issues"
+  },
+  "homepage": "https://github.com/martsis/canvas-slider#readme"
+}
