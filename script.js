@@ -1,12 +1,4 @@
 // Copyright © 2020 Alexander Martsis. All rights reserved.
-const canvas = document.querySelector('#canvas');
-const printElement = document.querySelector('#print');
-const CANVAS_WIDTH = 680;
-const CANVAS_HEIGHT = 880;
-const PATTERN_WIDTH = 320;
-const PATTERN_HEIGHT = 320;
-const PATTERN_BLUR = 10;
-
 class Pattern{
     constructor({width, height, blur}){
         this.width = width;
