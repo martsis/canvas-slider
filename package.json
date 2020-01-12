@@ -1,5 +1,5 @@
 {
-  "name": "canvas-slider",
+  "name": "canvas-slideshow",
   "version": "1.0.0",
   "description": "Canvas slideshow",
   "main": "./src/canvas-slideshow.js",
@@ -23,6 +23,7 @@
   "homepage": "https://github.com/martsis/canvas-slideshow#readme",
   "dependencies": {},
   "devDependencies": {
-    "webpack": "^4.41.5"
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   }
 }
