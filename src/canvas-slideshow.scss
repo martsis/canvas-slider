@@ -1,0 +1,11 @@
+.canvasSlideshow-container{
+    position: relative;
+}
+
+.canvasSlideshow-slide{
+    position: absolute;
+}
+
+.canvasSlideshow-slide canvas {
+    max-width: 100%;
+}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./src/canvas-slideshow.scss"],"names":[],"mappings":"AAAA,2BAA2B,kBAAkB,uBAAuB,kBAAkB,8BAA8B","file":"canvas-slideshow.css","sourcesContent":[".canvasSlideshow-container{position:relative}.canvasSlideshow-slide{position:absolute}.canvasSlideshow-slide canvas{max-width:100%}\n"],"sourceRoot":""}
