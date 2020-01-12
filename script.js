@@ -156,7 +156,7 @@ class Slide {
 }
 
 class CanvasSlideshow{
-    constructor({container, width, height, slides, pattern, nextBtn, prevBtn, drawn}){
+    constructor({container, width, height, slides, pattern, nextBtn, prevBtn, drawn, onNext, onPrev}){
         if (typeof container == 'undefined'){
             console.error('Param "container" is undefined');
             return;
@@ -183,6 +183,14 @@ class CanvasSlideshow{
 
         if (typeof drawn != 'undefined'){
             this.drawn = drawn;
+        }
+
+        if (typeof onNext != 'undefined'){
+            this.onNext = onNext;
+        }
+
+        if (typeof onPrev != 'undefined'){
+            this.onPrev = onPrev;
         }
         
         this._pattern = new Pattern(pattern);
@@ -264,14 +272,18 @@ class CanvasSlideshow{
 
     next(){
         if (this.animating) return;
+        if (this.onNext) this.onNext();
+
         this._nextStart();
         this.animation(this.slides[this.currentIndex].slide);
     }
 
     prev(){
         if (this.animating) return;
+        if (this.onPrev) this.onPrev();
+
         this._prevStart();
-        this.animation(this.slides[this.currentIndex].slide, true);
+        this.animation(this.slides[this.currentIndex].slide);
     }
 
     _nextStart(){
@@ -324,7 +336,7 @@ class CanvasSlideshow{
         })
     }
 
-    animation(slide, prev){
+    animation(slide, prev, callback){
         const radius = this._pattern.width / 2 - this._pattern.blur;
         let intervalY = -radius;
         let intervalX = slide.width - radius;
@@ -390,7 +402,13 @@ document.addEventListener('DOMContentLoaded', function(){
             height: 320,
             blur: 10
         },
-        drawn: true
+        drawn: true,
+        onNext: function() {
+            console.log('next');
+        },
+        onPrev: function() {
+            console.log('prev');
+        }
     }
 
     const canvasSlideshow = new CanvasSlideshow(slideshowParams);
