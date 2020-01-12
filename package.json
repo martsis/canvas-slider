@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/martsis/canvas-slideshow/issues"
   },
-  "homepage": "https://github.com/martsis/canvas-slideshow#readme"
+  "homepage": "https://github.com/martsis/canvas-slideshow#readme",
+  "dependencies": {
+    "webpack": "^4.41.5"
+  }
 }
