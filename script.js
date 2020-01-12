@@ -1,3 +1,4 @@
+// Copyright © 2020 Alexander Martsis. All rights reserved.
 const canvas = document.querySelector('#canvas');
 const printElement = document.querySelector('#print');
 const CANVAS_WIDTH = 680;
