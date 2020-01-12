@@ -1,6 +1,6 @@
 # Canvas slideshow
 ```js
-import CanvasSlideshow from '@martsis\canvas-slideshow';
+import CanvasSlideshow from '@martsis/canvas-slideshow';
 
 const slideshowParams = {
     container: '#slideshow',
