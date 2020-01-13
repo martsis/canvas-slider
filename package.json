@@ -1,6 +1,6 @@
 {
   "name": "@martsis/canvas-slideshow",
-  "version": "1.0.5",
+  "version": "1.0.0-beta0",
   "description": "Canvas slideshow",
   "main": "./src/canvas-slideshow.js",
   "scripts": {
@@ -32,5 +32,6 @@
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
-  }
+  },
+  "dependencies": {}
 }
