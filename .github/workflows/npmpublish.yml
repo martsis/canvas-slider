@@ -39,6 +39,8 @@ jobs:
       #- run: npm publish --access public
       #  env:
       #    NODE_AUTH_TOKEN: ${{secrets.PUBLISH_NPM_TOKEN}}
+      - run: printenv
+      - run: cat /home/runner/work/_temp/.npmrc
 
   publish-gpr:
     needs: build
