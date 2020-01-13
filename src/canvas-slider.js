@@ -60,8 +60,8 @@ export default class CanvasSlider{
         }
 
         document.querySelectorAll(slideSelector).forEach(item => {
-            if (item.src) {
-                this.slides.push(item.src);
+            if (item.getAttribute(this.slideSelector)) {
+                this.slides.push(item.getAttribute(this.slideSelector));
             }
         })
 
