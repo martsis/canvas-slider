@@ -25,10 +25,20 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: echo "//registry.npmjs.org/:_authToken=${{secrets.PUBLISH_NPM_TOKEN}}" >> .npmrc
-      - run: npm publish --access public
+      - name: Publish beta
+        if: github.event.prerelease == true
+        run: npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{secrets.PUBLISH_NPM_TOKEN}}
+
+      - name: Publish stable
+        if: github.event.prerelease == false
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.PUBLISH_NPM_TOKEN}}
+      #- run: npm publish --access public
+      #  env:
+      #    NODE_AUTH_TOKEN: ${{secrets.PUBLISH_NPM_TOKEN}}
 
   publish-gpr:
     needs: build
