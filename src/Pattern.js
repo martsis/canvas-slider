@@ -1,3 +1,4 @@
+// Copyright © 2020 Alexander Martsis. All rights reserved.
 export default class Pattern{
     constructor({width, height, blur}){
         this.width = width;
