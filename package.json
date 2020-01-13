@@ -1,26 +1,26 @@
 {
-  "name": "@martsis/canvas-slideshow",
+  "name": "@martsis/canvas-slider",
   "version": "1.0.0",
-  "description": "Canvas slideshow",
-  "main": "./src/canvas-slideshow.js",
+  "description": "Canvas slider",
+  "main": "./src/canvas-slider.js",
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/martsis/canvas-slideshow.git"
+    "url": "git+https://github.com/martsis/canvas-slider.git"
   },
   "keywords": [
     "canvas",
-    "slideshow"
+    "slider"
   ],
   "author": "Alexander Martsis",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/martsis/canvas-slideshow/issues"
+    "url": "https://github.com/martsis/canvas-slider/issues"
   },
-  "homepage": "https://github.com/martsis/canvas-slideshow#readme",
+  "homepage": "https://github.com/martsis/canvas-slider#readme",
   "devDependencies": {
     "@babel/core": "^7.8.0",
     "@babel/preset-env": "^7.8.2",
@@ -29,9 +29,6 @@
     "mini-css-extract-plugin": "^0.9.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   },
   "dependencies": {}
 }
