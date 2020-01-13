@@ -1,8 +1,8 @@
 # Canvas slideshow
 ```js
-import CanvasSlideshow from '@martsis/canvas-slideshow';
+import CanvasSlider from '@martsis/canvas-slider';
 
-const slideshowParams = {
+const sliderParams = {
     container: '#slideshow',
     nextBtn: '#next',
     prevBtn: '#prev',
@@ -27,5 +27,5 @@ const slideshowParams = {
     }
 }
 
-new CanvasSlideshow(slideshowParams);
+new CanvasSlider(sliderParams);
 ```
