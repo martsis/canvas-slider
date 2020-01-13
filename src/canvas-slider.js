@@ -60,6 +60,8 @@ export default class CanvasSlider{
             }
         })
 
+        this._pattern = new Pattern(pattern);
+
         slides.forEach(url => {
             const slide = new Slide({url, width: this.width, height: this.height, pattern: this._pattern, drawn: this.drawn});
             slide.image.addEventListener('load', () => {
@@ -75,8 +77,6 @@ export default class CanvasSlider{
                 container: slideContainer
             });
         });
-
-        this._pattern = new Pattern(pattern);
 
         this.currentIndex = 0;
         this.nextIndex = this.currentIndex + 1;

@@ -9,6 +9,8 @@ export default class Slide {
         this.pattern = pattern;
         this._backup;
 
+        console.log(pattern);
+
         if (typeof drawn != 'undefined'){
             this.drawn = drawn;
         } else {
@@ -41,8 +43,6 @@ export default class Slide {
             
             if (imageRatio > canvasRatio){
                 const imagePositionX = -(e.target.width - e.target.height * canvasRatio) / 2 * (this.height / e.target.height);
-                //const imagePositionX = -(e.target.width - this.width * (e.target.height / this.height)) / 2;
-                //console.log(`cw: ${this.width}; ch: ${this.height}; w: ${e.target.width}; h: ${e.target.height}; r: ${imageRatio}; cr: ${canvasRatio}`, e.target.width * (e.target.height / this.height));
                 const imageWidth = e.target.width * (this.height / e.target.height);
                 this._ctx.drawImage(e.target, imagePositionX, 0, imageWidth, this.height);
             } else {
