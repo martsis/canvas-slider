@@ -3,7 +3,7 @@ import './canvas-slideshow.css';
 import Slide from './Slide';
 import Pattern from './Pattern';
 
-export default class CanvasSlideshow{
+export default class CanvasSlider{
     constructor({container, width, height, slides, pattern, nextBtn, prevBtn, drawn, onNext, onPrev, slideSelector}){
         if (typeof container == 'undefined'){
             console.error('Param "container" is undefined');
