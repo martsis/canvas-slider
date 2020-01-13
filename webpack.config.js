@@ -2,11 +2,11 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require('path');
 
 module.exports = {
-    entry: './src/canvas-slideshow.js',
+    entry: './src/canvas-slider.js',
     devtool: 'source-map',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'canvas-slideshow.js'
+        filename: 'canvas-slider.js'
     },
     mode: 'production',
     module: {
@@ -36,7 +36,7 @@ module.exports = {
         ],
     },
     plugins: [new MiniCssExtractPlugin({
-        filename: 'canvas-slideshow.css',
+        filename: 'canvas-slider.css',
         chunkFilename: '[id].css'
     })],
 };
