@@ -1,7 +1,7 @@
 // Copyright © 2020 Alexander Martsis. All rights reserved.
 //import './canvas-slider.css';
-import Slide from './Slide';
-import Pattern from './Pattern';
+import Slide from './Slide.js';
+import Pattern from './Pattern.js';
 
 export default class CanvasSlider{
     constructor({container, width, height, slides, pattern, nextBtn, prevBtn, drawn, onNext, onPrev, slideSelector}){
@@ -42,26 +42,21 @@ export default class CanvasSlider{
         }
 
         if (typeof slideSelector != 'undefined') {
-            this.slideSelector = `${container} [data-img-src]`;
+            this.slideSelector = `${container} ${slideSelector}`;
+        } else {
+            this.slideSelector = `${container} img`;
         }
-        
-        this._pattern = new Pattern(pattern);
 
         this.slides = [];
-        this.currentIndex = 0;
-        this.nextIndex = this.currentIndex + 1;
-        
-        this._slideshowContainer = document.createElement('div');
-        this._slideshowContainer.className = 'canvasSlideshow-container';
-        this._element.append(this._slideshowContainer);
 
         if (typeof slides == 'undefined'){
-
+            slides = [];
         }
 
-        document.querySelectorAll(slideSelector).forEach(item => {
-            if (item.getAttribute(this.slideSelector)) {
-                this.slides.push(item.getAttribute(this.slideSelector));
+        document.querySelectorAll(this.slideSelector).forEach(item => {
+            if (item.src) {
+                slides.push(item.src);
+                item.remove();
             }
         })
 
@@ -81,9 +76,20 @@ export default class CanvasSlider{
             });
         });
 
+        this._pattern = new Pattern(pattern);
+
+        this.currentIndex = 0;
+        this.nextIndex = this.currentIndex + 1;
+        
+        this._slideshowContainer = document.createElement('div');
+        this._slideshowContainer.className = 'canvasSlideshow-container';
+        this._element.append(this._slideshowContainer);
+
         this.slides.forEach(slide => {
             this._slideshowContainer.append(slide.container);
         });
+
+        
 
         this._indexUpdateStart();
         this._indexUpdateFinish();
