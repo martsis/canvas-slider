@@ -1,6 +1,6 @@
 {
   "name": "@martsis/canvas-slideshow",
-  "version": "1.0-beta.1",
+  "version": "1.0.0",
   "description": "Canvas slideshow",
   "main": "./src/canvas-slideshow.js",
   "scripts": {
