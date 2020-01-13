@@ -1,3 +1,4 @@
+// Copyright © 2020 Alexander Martsis. All rights reserved.
 export default class Slide {
     constructor({url, width, height, pattern, drawn}){
         this.url = url;
