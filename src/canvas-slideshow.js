@@ -1,4 +1,6 @@
 // Copyright © 2020 Alexander Martsis. All rights reserved.
+import './canvas-slideshow.css';
+
 class Pattern{
     constructor({width, height, blur}){
         this.width = width;

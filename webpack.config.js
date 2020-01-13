@@ -12,7 +12,17 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.s?css$/i,
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                    presets: ['@babel/preset-env']
+                    }
+                }
+            },
+            {
+                test: /\.css$/i,
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader,
@@ -21,7 +31,6 @@ module.exports = {
                         }
                     },
                     'css-loader',
-                    'sass-loader',
                 ]
             }
         ],

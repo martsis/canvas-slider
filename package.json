@@ -1,6 +1,6 @@
 {
   "name": "@martsis/canvas-slideshow",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Canvas slideshow",
   "main": "./src/canvas-slideshow.js",
   "scripts": {
@@ -22,10 +22,11 @@
   },
   "homepage": "https://github.com/martsis/canvas-slideshow#readme",
   "devDependencies": {
+    "@babel/core": "^7.8.0",
+    "@babel/preset-env": "^7.8.2",
+    "babel-loader": "^8.0.6",
     "css-loader": "^3.4.2",
     "mini-css-extract-plugin": "^0.9.0",
-    "node-sass": "^4.13.0",
-    "sass-loader": "^8.0.1",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
   }

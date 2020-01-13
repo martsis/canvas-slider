@@ -1,4 +1,13 @@
-.canvasSlideshow-container{position:relative}.canvasSlideshow-slide{position:absolute}.canvasSlideshow-slide canvas{max-width:100%}
+.canvasSlideshow-container{
+    position: relative;
+}
 
+.canvasSlideshow-slide{
+    position: absolute;
+}
+
+.canvasSlideshow-slide canvas {
+    max-width: 100%;
+}
 
 /*# sourceMappingURL=canvas-slideshow.css.map*/
