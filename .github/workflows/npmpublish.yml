@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 12
       - run: npm ci
-      - run: npm test
+      - run: npm run build
 
   publish-npm:
     needs: build
@@ -25,9 +25,9 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: npm publish
+      - run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          NODE_AUTH_TOKEN: ${{secrets.PUBLISH_NPM_TOKEN}}
 
   publish-gpr:
     needs: build
@@ -40,6 +40,7 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: '@martsis'
       - run: npm ci
+      - run: echo registry=https://npm.pkg.github.com/@martsis >> .npmrc
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.PUBLISH_GITHUB_TOKEN}}
