@@ -1,5 +1,4 @@
 // Copyright © 2020 Alexander Martsis. All rights reserved.
-//import './canvas-slider.css';
 import Slide from './Slide.js';
 import Pattern from './Pattern.js';
 
