@@ -72,7 +72,6 @@ export default class Slide {
         });
         this.canvas.addEventListener('mousemove', e => {
             if ((this._mouseDownState && this.drawn) || this.hover){
-                console.log(e.offsetX, e.offsetY)
                 this.draw(e.offsetX, e.offsetY);
             }
         });
