@@ -1,6 +1,6 @@
 // Copyright © 2020 Alexander Martsis. All rights reserved.
 export default class Slide {
-    constructor({url, width, height, pattern, drawn}){
+    constructor({url, width, height, pattern, drawn, hover}){
         this.url = url;
         this.image = new Image();
         this.image.crossOrigin = 'anonymous';
@@ -8,6 +8,12 @@ export default class Slide {
         this._mouseDownState = false;
         this.pattern = pattern;
         this._backup;
+
+        if (typeof hover != 'undefined'){
+            this.hover = hover;
+        } else {
+            this.hover = false;
+        }
 
         if (typeof drawn != 'undefined'){
             this.drawn = drawn;
@@ -65,7 +71,8 @@ export default class Slide {
             }
         });
         this.canvas.addEventListener('mousemove', e => {
-            if (this._mouseDownState && this.drawn){
+            if ((this._mouseDownState && this.drawn) || this.hover){
+                console.log(e.offsetX, e.offsetY)
                 this.draw(e.offsetX, e.offsetY);
             }
         });
@@ -77,10 +84,6 @@ export default class Slide {
 
     restore(){
         this._ctx.putImageData(this._backup, 0, 0);
-    }
-
-    resize(){
-        this.canvas.width 
     }
 
     draw(x, y){

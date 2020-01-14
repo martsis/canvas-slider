@@ -3,7 +3,7 @@ import Slide from './Slide.js';
 import Pattern from './Pattern.js';
 
 export default class CanvasSlider{
-    constructor({container, width, height, slides, pattern, nextBtn, prevBtn, drawn, onNext, onPrev, slideSelector}){
+    constructor({container, width, height, slides, pattern, nextBtn, prevBtn, drawn, hover, onNext, onPrev, slideSelector}){
         if (typeof container == 'undefined'){
             console.error('Param "container" is undefined');
             return;
@@ -30,6 +30,12 @@ export default class CanvasSlider{
 
         if (typeof drawn != 'undefined'){
             this.drawn = drawn;
+        }
+
+        if (typeof hover != 'undefined'){
+            this.hover = hover;
+        } else {
+            this.hover = false;
         }
 
         if (typeof onNext != 'undefined'){
@@ -62,7 +68,7 @@ export default class CanvasSlider{
         this._pattern = new Pattern(pattern);
 
         slides.forEach(url => {
-            const slide = new Slide({url, width: this.width, height: this.height, pattern: this._pattern, drawn: this.drawn});
+            const slide = new Slide({url, width: this.width, height: this.height, pattern: this._pattern, drawn: this.drawn, hover: this.hover});
             slide.image.addEventListener('load', () => {
                 this.resize();
             });
