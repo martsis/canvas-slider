@@ -9,8 +9,6 @@ export default class Slide {
         this.pattern = pattern;
         this._backup;
 
-        console.log(pattern);
-
         if (typeof drawn != 'undefined'){
             this.drawn = drawn;
         } else {
