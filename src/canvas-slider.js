@@ -3,10 +3,18 @@ import Slide from './Slide.js';
 import Pattern from './Pattern.js';
 
 export default class CanvasSlider{
-    constructor({container, width, height, slides, pattern, nextBtn, prevBtn, drawn, hover, onNext, onPrev, slideSelector}){
+    constructor({container, width, height, slides, pattern, nextBtn, prevBtn, drawn, hover, onNext, onPrev, 
+        slideSelector, loop
+    }){
         if (typeof container == 'undefined'){
             console.error('Param "container" is undefined');
             return;
+        }
+
+        if (typeof loop == 'boolean'){
+            this.loop = loop;
+        } else {
+            this.loop = false;
         }
         
         this._element = document.querySelector(container);
@@ -84,7 +92,7 @@ export default class CanvasSlider{
         });
 
         this.currentIndex = 0;
-        this.nextIndex = this.currentIndex + 1;
+        this._nextIndex = this.currentIndex + 1;
         
         this._slideshowContainer = document.createElement('div');
         this._slideshowContainer.className = 'canvasSlideshow-container';
@@ -124,7 +132,7 @@ export default class CanvasSlider{
                 item.container.style.zIndex = 1000;
             }
 
-            if (index == this.nextIndex) {
+            if (index == this._nextIndex) {
                 item.container.style.zIndex = 990;
             }
         });
@@ -132,7 +140,7 @@ export default class CanvasSlider{
 
     _indexUpdateFinish(){
         this.slides.forEach((item, index) => {
-            if (index != this.currentIndex && index != this.nextIndex){
+            if (index != this.currentIndex && index != this._nextIndex){
                 item.container.style.zIndex = 0;
             }
         });
@@ -144,7 +152,9 @@ export default class CanvasSlider{
     }
 
     next(){
+        console.log(this.currentIndex)
         if (this.animating) return;
+        if (!this.loop && this.currentIndex >= this.slides.length - 1) return;
         if (this.onNext) this.onNext();
 
         this._nextStart();
@@ -152,7 +162,9 @@ export default class CanvasSlider{
     }
 
     prev(){
+        console.log(this.currentIndex)
         if (this.animating) return;
+        if (!this.loop && this.currentIndex <= 0) return;
         if (this.onPrev) this.onPrev();
 
         this._prevStart();
@@ -160,22 +172,22 @@ export default class CanvasSlider{
     }
 
     _nextStart(){
-        this.nextIndex = this.currentIndex;
-        this.nextIndex++;
+        this._nextIndex = this.currentIndex;
+        this._nextIndex++;
     
-        if (this.nextIndex >= this.slides.length){
-            this.nextIndex = 0;
+        if (this._nextIndex >= this.slides.length){
+            this._nextIndex = 0;
         }
 
         this._indexUpdateStart();
     }
 
     _prevStart(){
-        this.nextIndex = this.currentIndex;
-        this.nextIndex--;
+        this._nextIndex = this.currentIndex;
+        this._nextIndex--;
     
-        if (this.nextIndex < 0){
-            this.nextIndex = this.slides.length - 1;
+        if (this._nextIndex < 0){
+            this._nextIndex = this.slides.length - 1;
         }
 
         this._indexUpdateStart();
@@ -196,14 +208,15 @@ export default class CanvasSlider{
     }
     
     _nextFinish(){
-        this.currentIndex++;
+        this.currentIndex = this._nextIndex;
+        // this._nextIndex++;
         
-        if (this.currentIndex >= this.slides.length){
-            this.currentIndex = 0;
-        }
-
+        // if (this._nextIndex >= this.slides.length){
+        //     this._nextIndex = 0;
+        // }
+        
         this._indexUpdateFinish();
-
+        
         this.slides.forEach((item, index) => {
             item.slide.restore();
         })
