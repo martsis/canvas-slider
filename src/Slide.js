@@ -96,11 +96,14 @@ export default class Slide {
                 this._mouseDownState = false;
             }
         });
-        this.canvas.addEventListener('mousemove', e => {
-            if ((this._mouseDownState && this.drawn) || this.hover){
-                this.draw(e.offsetX, e.offsetY);
-            }
-        });
+
+        if (this.hover || this.drawn){
+            window.addEventListener('mousemove', e => {
+                if (this.drawn && !this._mouseDownState) return;
+                this.draw(e.pageX - window.scrollX - this.canvas.getBoundingClientRect().x,
+                    e.pageY - window.scrollY - this.canvas.getBoundingClientRect().y);
+            });
+        }
     }
 
     save(){
