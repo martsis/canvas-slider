@@ -67,7 +67,6 @@ export default class Slide {
             this.canvas.height = this.height;
             this.canvas.width = this.width;
             
-            
             const canvasRatio = this.width / this.height;
             const imageRatio = e.target.width / e.target.height;
 
@@ -83,27 +82,26 @@ export default class Slide {
             }
 
             this.save();
-        });
 
-        this.canvas.addEventListener('mousedown', e => {
-            if (this.drawn){
-                this._mouseDownState = true;
-                this.draw(e.offsetX, e.offsetY);
+            if (this.hover || this.drawn){
+                window.addEventListener('mousemove', e => {
+                    if (this.drawn && !this._mouseDownState) return;
+                    this.draw(e.pageX - window.scrollX - this.canvas.getBoundingClientRect().x,
+                        e.pageY - window.scrollY - this.canvas.getBoundingClientRect().y);
+                });
             }
-        });
-        this.canvas.addEventListener('mouseup', () => {
-            if (this.drawn){
-                this._mouseDownState = false;
-            }
-        });
-
-        if (this.hover || this.drawn){
-            window.addEventListener('mousemove', e => {
-                if (this.drawn && !this._mouseDownState) return;
-                this.draw(e.pageX - window.scrollX - this.canvas.getBoundingClientRect().x,
-                    e.pageY - window.scrollY - this.canvas.getBoundingClientRect().y);
+            this.canvas.addEventListener('mousedown', e => {
+                if (this.drawn){
+                    this._mouseDownState = true;
+                    this.draw(e.offsetX, e.offsetY);
+                }
             });
-        }
+            this.canvas.addEventListener('mouseup', () => {
+                if (this.drawn){
+                    this._mouseDownState = false;
+                }
+            });
+        });
     }
 
     save(){
