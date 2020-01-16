@@ -34,6 +34,10 @@ export default class CanvasSlider{
 
         if (typeof prevBtn != 'undefined'){
             this.prevBtn = document.querySelector(prevBtn);
+            if(!this.loop) {
+                this.prevBtn.classList.add('button-disable');
+                this.prevBtn.setAttribute('disabled', 'disabled');
+            }
         }
 
         if (typeof drawn != 'undefined'){
@@ -152,20 +156,26 @@ export default class CanvasSlider{
     }
 
     next(){
-        console.log(this.currentIndex)
         if (this.animating) return;
         if (!this.loop && this.currentIndex >= this.slides.length - 1) return;
         if (this.onNext) this.onNext();
+        if (!this.loop) {
+            this.prevBtn.classList.remove('button-disable');
+            this.prevBtn.removeAttribute('disabled');
+        }
 
         this._nextStart();
         this.animation(this.slides[this.currentIndex].slide);
     }
 
     prev(){
-        console.log(this.currentIndex)
         if (this.animating) return;
         if (!this.loop && this.currentIndex <= 0) return;
         if (this.onPrev) this.onPrev();
+        if (!this.loop) {
+            this.nextBtn.classList.remove('button-disable');
+            this.nextBtn.removeAttribute('disabled');
+        }
 
         this._prevStart();
         this.animation(this.slides[this.currentIndex].slide);
@@ -200,6 +210,11 @@ export default class CanvasSlider{
             this.currentIndex = this.slides.length - 1;
         }
 
+        if (!this.loop && this.currentIndex <= 0){
+            this.prevBtn.classList.add('button-disable');
+            this.prevBtn.setAttribute('disabled', 'disabled');
+        }
+
         this._indexUpdateFinish();
 
         this.slides.forEach(item => {
@@ -209,11 +224,11 @@ export default class CanvasSlider{
     
     _nextFinish(){
         this.currentIndex = this._nextIndex;
-        // this._nextIndex++;
-        
-        // if (this._nextIndex >= this.slides.length){
-        //     this._nextIndex = 0;
-        // }
+
+        if (!this.loop && this.currentIndex >= this.slides.length - 1){
+            this.nextBtn.classList.add('button-disable');
+            this.nextBtn.setAttribute('disabled', 'disabled');
+        }
         
         this._indexUpdateFinish();
         
@@ -229,6 +244,7 @@ export default class CanvasSlider{
         let direction = 'down';
         let iteration = 0;
         this.animating = true;
+        
         const updateCanvas = setInterval(() => {
             if (iteration > slide.width / this._pattern.width * 2){
                 clearInterval(updateCanvas);
@@ -265,6 +281,6 @@ export default class CanvasSlider{
                 intervalY -= slide.height / 20;
                 intervalX -= slide.width / 20;
             }
-        }, 16);
+        }, 1000/60);
     }
 }

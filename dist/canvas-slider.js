@@ -415,6 +415,11 @@ function () {
 
     if (typeof prevBtn != 'undefined') {
       this.prevBtn = document.querySelector(prevBtn);
+
+      if (!this.loop) {
+        this.prevBtn.classList.add('button-disable');
+        this.prevBtn.setAttribute('disabled', 'disabled');
+      }
     }
 
     if (typeof drawn != 'undefined') {
@@ -546,10 +551,14 @@ function () {
   }, {
     key: "next",
     value: function next() {
-      console.log(this.currentIndex);
       if (this.animating) return;
       if (!this.loop && this.currentIndex >= this.slides.length - 1) return;
       if (this.onNext) this.onNext();
+
+      if (!this.loop) {
+        this.prevBtn.classList.remove('button-disable');
+        this.prevBtn.removeAttribute('disabled');
+      }
 
       this._nextStart();
 
@@ -558,10 +567,14 @@ function () {
   }, {
     key: "prev",
     value: function prev() {
-      console.log(this.currentIndex);
       if (this.animating) return;
       if (!this.loop && this.currentIndex <= 0) return;
       if (this.onPrev) this.onPrev();
+
+      if (!this.loop) {
+        this.nextBtn.classList.remove('button-disable');
+        this.nextBtn.removeAttribute('disabled');
+      }
 
       this._prevStart();
 
@@ -600,6 +613,11 @@ function () {
         this.currentIndex = this.slides.length - 1;
       }
 
+      if (!this.loop && this.currentIndex <= 0) {
+        this.prevBtn.classList.add('button-disable');
+        this.prevBtn.setAttribute('disabled', 'disabled');
+      }
+
       this._indexUpdateFinish();
 
       this.slides.forEach(function (item) {
@@ -609,10 +627,12 @@ function () {
   }, {
     key: "_nextFinish",
     value: function _nextFinish() {
-      this.currentIndex = this._nextIndex; // this._nextIndex++;
-      // if (this._nextIndex >= this.slides.length){
-      //     this._nextIndex = 0;
-      // }
+      this.currentIndex = this._nextIndex;
+
+      if (!this.loop && this.currentIndex >= this.slides.length - 1) {
+        this.nextBtn.classList.add('button-disable');
+        this.nextBtn.setAttribute('disabled', 'disabled');
+      }
 
       this._indexUpdateFinish();
 
@@ -666,7 +686,7 @@ function () {
           intervalY -= slide.height / 20;
           intervalX -= slide.width / 20;
         }
-      }, 16);
+      }, 1000 / 60);
     }
   }]);
 
