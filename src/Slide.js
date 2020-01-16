@@ -2,10 +2,16 @@
 import Pattern from './Pattern.js';
 
 export default class Slide {
-    constructor({canvas, image, url, width, height, pattern, drawn, hover}){
+    constructor({canvas, image, url, width, height, pattern, drawn, hover, container}){
         if (typeof canvas != 'undefined'){
             this.canvas = canvas;
         }
+
+        if (typeof container == 'string'){
+            this.container = container;
+            this._containerElement = document.querySelector(container);
+        }
+
         if (typeof image != 'undefined'){
             this.image = image;
             this.image.crossOrigin = 'anonymous';
@@ -50,6 +56,10 @@ export default class Slide {
 
         this.canvas = document.createElement('canvas');
         this._ctx = this.canvas.getContext('2d');
+        
+        if (typeof this._containerElement != 'undefined'){
+            this._containerElement.append(this.canvas);
+        }
         
         this.image.addEventListener('load', e => {
             if (typeof width != 'undefined'){

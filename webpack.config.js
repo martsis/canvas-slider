@@ -8,7 +8,7 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         filename: 'canvas-slider.js'
     },
-    mode: 'production',
+    mode: 'development',
     module: {
         rules: [
             {
