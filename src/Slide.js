@@ -1,12 +1,39 @@
 // Copyright © 2020 Alexander Martsis. All rights reserved.
+import Pattern from './Pattern.js';
+
 export default class Slide {
-    constructor({url, width, height, pattern, drawn, hover}){
-        this.url = url;
-        this.image = new Image();
-        this.image.crossOrigin = 'anonymous';
-        this.image.src = this.url;
+    constructor({canvas, image, url, width, height, pattern, drawn, hover}){
+        if (typeof canvas != 'undefined'){
+            this.canvas = canvas;
+        }
+        if (typeof image != 'undefined'){
+            this.image = image;
+            this.image.crossOrigin = 'anonymous';
+        } else {
+            if (typeof url != 'undefined'){
+                this.url = url;
+            } 
+
+            if (typeof this.url == 'string'){
+                this.image = new Image();
+                this.image.crossOrigin = 'anonymous';
+                this.image.src = this.url;
+            } else {
+                console.log('url empty')
+            }
+        }
+        
+        if (typeof pattern == 'undefined'){
+            this.pattern = new Pattern({
+                width: 100,
+                height: 100,
+                blur: 20
+            });
+        } else {
+            this.pattern = pattern;
+        }
+
         this._mouseDownState = false;
-        this.pattern = pattern;
         this._backup;
 
         if (typeof hover != 'undefined'){
@@ -54,7 +81,6 @@ export default class Slide {
                 const imageHeight = e.target.height * (this.width / e.target.width);
                 this._ctx.drawImage(e.target, 0, imagePositionY, this.width, imageHeight);
             }
-
 
             this.save();
         });
