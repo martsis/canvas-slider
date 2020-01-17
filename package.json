@@ -1,8 +1,9 @@
 {
   "name": "@martsis/canvas-slider",
-  "version": "1.0.5-beta.4",
+  "version": "1.0.5-beta.5",
   "description": "Canvas slider",
-  "main": "./src/canvas-slider.js",
+  "main": "dist/canvas-slider.js",
+  "style": "dist/canvas-slider.css",
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch"
