@@ -417,7 +417,7 @@ function () {
       this.prevBtn = document.querySelector(prevBtn);
 
       if (!this.loop) {
-        this.prevBtn.classList.add('button-disable');
+        this.prevBtn.classList.add('button-disabled');
         this.prevBtn.setAttribute('disabled', 'disabled');
       }
     }
@@ -556,7 +556,7 @@ function () {
       if (this.onNext) this.onNext();
 
       if (!this.loop) {
-        this.prevBtn.classList.remove('button-disable');
+        this.prevBtn.classList.remove('button-disabled');
         this.prevBtn.removeAttribute('disabled');
       }
 
@@ -572,7 +572,7 @@ function () {
       if (this.onPrev) this.onPrev();
 
       if (!this.loop) {
-        this.nextBtn.classList.remove('button-disable');
+        this.nextBtn.classList.remove('button-disabled');
         this.nextBtn.removeAttribute('disabled');
       }
 
@@ -586,6 +586,11 @@ function () {
       this._nextIndex = this.currentIndex;
       this._nextIndex++;
 
+      if (!this.loop && this._nextIndex >= this.slides.length - 1) {
+        this.nextBtn.classList.add('button-disabled');
+        this.nextBtn.setAttribute('disabled', 'disabled');
+      }
+
       if (this._nextIndex >= this.slides.length) {
         this._nextIndex = 0;
       }
@@ -597,6 +602,11 @@ function () {
     value: function _prevStart() {
       this._nextIndex = this.currentIndex;
       this._nextIndex--;
+
+      if (!this.loop && this._nextIndex <= 0) {
+        this.prevBtn.classList.add('button-disabledd');
+        this.prevBtn.setAttribute('disabled', 'disabled');
+      }
 
       if (this._nextIndex < 0) {
         this._nextIndex = this.slides.length - 1;
@@ -613,11 +623,6 @@ function () {
         this.currentIndex = this.slides.length - 1;
       }
 
-      if (!this.loop && this.currentIndex <= 0) {
-        this.prevBtn.classList.add('button-disable');
-        this.prevBtn.setAttribute('disabled', 'disabled');
-      }
-
       this._indexUpdateFinish();
 
       this.slides.forEach(function (item) {
@@ -628,11 +633,6 @@ function () {
     key: "_nextFinish",
     value: function _nextFinish() {
       this.currentIndex = this._nextIndex;
-
-      if (!this.loop && this.currentIndex >= this.slides.length - 1) {
-        this.nextBtn.classList.add('button-disable');
-        this.nextBtn.setAttribute('disabled', 'disabled');
-      }
 
       this._indexUpdateFinish();
 
