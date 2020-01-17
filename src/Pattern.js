@@ -1,4 +1,5 @@
 // Copyright © 2020 Alexander Martsis. All rights reserved.
+// Licensed under MIT (https://github.com/martsis/canvas-slider/blob/master/LICENSE)
 export default class Pattern{
     constructor({width, height, blur}){
         this.width = width;

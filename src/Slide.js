@@ -1,4 +1,5 @@
 // Copyright © 2020 Alexander Martsis. All rights reserved.
+// Licensed under MIT (https://github.com/martsis/canvas-slider/blob/master/LICENSE)
 import Pattern from './Pattern.js';
 
 export default class Slide {
