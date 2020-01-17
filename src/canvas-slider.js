@@ -4,7 +4,7 @@
 import Slide from './Slide.js';
 import Pattern from './Pattern.js';
 
-export default class CanvasSlider{
+class CanvasSlider{
     constructor({container, width, height, slides, pattern, nextBtn, prevBtn, drawn, hover, onNext, onPrev, 
         slideSelector, loop
     }){

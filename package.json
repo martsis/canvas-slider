@@ -1,6 +1,6 @@
 {
   "name": "@martsis/canvas-slider",
-  "version": "1.0.5-beta.5",
+  "version": "1.0.5-beta.6",
   "description": "Canvas slider",
   "main": "dist/canvas-slider.js",
   "style": "dist/canvas-slider.css",
