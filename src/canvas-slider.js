@@ -1,4 +1,6 @@
+// Canvas Slider
 // Copyright © 2020 Alexander Martsis. All rights reserved.
+// Licensed under MIT (https://github.com/martsis/canvas-slider/blob/master/LICENSE)
 import Slide from './Slide.js';
 import Pattern from './Pattern.js';
 
@@ -157,7 +159,7 @@ export default class CanvasSlider{
         if (this.animating) return;
         if (!this.loop && this.currentIndex >= this.slides.length - 1) return;
         if (this.onNext) this.onNext();
-        if (!this.loop) {
+        if (!this.loop && typeof this.prevBtn != 'undefined') {
             this.prevBtn.classList.remove('button-disabled');
             this.prevBtn.removeAttribute('disabled');
         }

@@ -99,6 +99,7 @@ __webpack_require__.r(__webpack_exports__);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 // Copyright © 2020 Alexander Martsis. All rights reserved.
+// Licensed under MIT (https://github.com/martsis/canvas-slider/blob/master/LICENSE)
 var Pattern = function Pattern(_ref) {
   var width = _ref.width,
       height = _ref.height,
@@ -164,6 +165,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 // Copyright © 2020 Alexander Martsis. All rights reserved.
+// Licensed under MIT (https://github.com/martsis/canvas-slider/blob/master/LICENSE)
 
 
 var Slide =
@@ -361,7 +363,9 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+// Canvas Slider
 // Copyright © 2020 Alexander Martsis. All rights reserved.
+// Licensed under MIT (https://github.com/martsis/canvas-slider/blob/master/LICENSE)
 
 
 
@@ -555,7 +559,7 @@ function () {
       if (!this.loop && this.currentIndex >= this.slides.length - 1) return;
       if (this.onNext) this.onNext();
 
-      if (!this.loop) {
+      if (!this.loop && typeof this.prevBtn != 'undefined') {
         this.prevBtn.classList.remove('button-disabled');
         this.prevBtn.removeAttribute('disabled');
       }
