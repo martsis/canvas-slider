@@ -6,7 +6,7 @@ import Pattern from './Pattern.js';
 
 export default class CanvasSlider{
     constructor({container, width, height, slides, pattern, nextBtn, prevBtn, drawn, hover, onNext, onPrev, 
-        slideSelector, loop
+        slideSelector, loop, lazy
     }){
         if (typeof container == 'undefined'){
             console.error('Param "container" is undefined');
@@ -17,6 +17,12 @@ export default class CanvasSlider{
             this.loop = loop;
         } else {
             this.loop = false;
+        }
+
+        if (typeof lazy == 'boolean'){
+            this.lazy = lazy;
+        } else {
+            this.lazy = false;
         }
         
         this._element = document.querySelector(container);
@@ -73,10 +79,12 @@ export default class CanvasSlider{
         }
 
         document.querySelectorAll(this.slideSelector).forEach(item => {
-            if (item.src) {
+            if (this.lazy){
+                slides.push(item.getAttribute('data-src'));
+            } else if(item.src) {
                 slides.push(item.src);
-                item.remove();
             }
+            item.remove();
         })
 
         this._pattern = new Pattern(pattern);
