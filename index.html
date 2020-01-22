@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./dist/canvas-slider.css">
+</head>
+<body>
+    <div id="slideshowColor">
+        <img data-src="http://placekitten.com/680/883">
+        <img data-src="http://placekitten.com/680/884">
+        <img data-src="http://placekitten.com/680/885">
+    </div>
+    <div>
+        <button type="button" id="prev">prev</button>
+        <button type="button" id="next">next</button>
+        <button type="button" id="load">load</button>
+    </div>
+    <h2>Canavase</h2>
+    <div id="canavase">
+
+    </div>
+    <script src="./dist/canvas-slider.js"></script>
+    <script type="module">
+        import CanvasSlider from './src/canvas-slider.js';
+        import Slide from './src/Slide.js';
+        const sliderColor = {
+            container: '#slideshowColor',
+            nextBtn: '#next',
+            prevBtn: '#prev',
+            lazy: true,
+            // slides: [
+            //     'http://placekitten.com/680/880',
+            //     'http://placekitten.com/681/881',
+            //     'http://placekitten.com/680/881',
+            // ],
+            width: 680,
+            height: 880,
+            loop: true,
+            pattern: {
+                width: 320,
+                height: 320,
+                blur: 10,
+            },
+            //hover: true,
+            drawn: true,
+            onNext: function() {
+                console.log('next');
+            },
+            onPrev: function() {
+                console.log('prev');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function(){
+            document.querySelector('#load').addEventListener('click', e => {
+                e.preventDefault();
+
+                const colorCanvasSlider = new CanvasSlider(sliderColor);
+            })
+
+
+            
+            const bg = new Image(680, 880);
+            const canavase = new Slide({
+                url: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2NgYGD4DwABBAEAcCBlCwAAAABJRU5ErkJggg==',
+                width: 680,
+                height: 880,
+                hover: true,
+                container: "#canavase"
+            });
+            
+            document.querySelector("#canavase").append(canavase.image)
+
+            window.canavase = canavase;
+            //window.colorCanvasSlider = colorCanvasSlider;
+        });
+    </script>
+</body>
+</html>

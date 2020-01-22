@@ -97,8 +97,11 @@ export default class Slide {
             if (this.hover || this.drawn){
                 window.addEventListener('mousemove', e => {
                     if (this.drawn && !this._mouseDownState) return;
-                    this.draw(e.pageX - window.scrollX - this.canvas.getBoundingClientRect().x,
-                        e.pageY - window.scrollY - this.canvas.getBoundingClientRect().y);
+                    const x = e.pageX - window.scrollX - this.canvas.getBoundingClientRect().x;
+                    const y = e.pageY - window.scrollY - this.canvas.getBoundingClientRect().y;
+
+                    //console.log(x, y)
+                    this.draw(x, y);
                 });
             }
             this.canvas.addEventListener('mousedown', e => {
@@ -124,6 +127,8 @@ export default class Slide {
     }
 
     draw(x, y){
+        //if (x < 0 || y < 0) return;
+        
         const positionX = this.width / this.canvas.offsetWidth * x;
         const positionY = this.height / this.canvas.offsetHeight * y;
         
@@ -144,7 +149,7 @@ export default class Slide {
                     imageData.data[i] = this.pattern.data[y][x];
                 }
             } catch(err){
-                console.log(err, imageData, this.pattern, i);
+                console.log(err, i, x, y);
             }
         }
     
