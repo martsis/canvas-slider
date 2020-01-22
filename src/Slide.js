@@ -140,7 +140,7 @@ export default class Slide {
             count++;
     
             try{
-                if (imageData.data[i] > this.pattern.data[y][x]){
+                if (imageData.data[i] && imageData.data[i] > this.pattern.data[y][x]){
                     imageData.data[i] = this.pattern.data[y][x];
                 }
             } catch(err){
