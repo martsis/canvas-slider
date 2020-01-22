@@ -127,10 +127,14 @@ export default class Slide {
     }
 
     draw(x, y){
+<<<<<<< HEAD
         if (x < -(this.pattern.width / 2) ||
             x > (this.width + this.pattern.width / 2) ||
             y < -(this.pattern.height / 2) ||
             y > (this.height + this.pattern.height / 2)) return;
+=======
+        //if (x < 0 || y < 0) return;
+>>>>>>> 0f3995baa0958f47378cb6bb0e68ed2d95f30d64
         
         const positionX = this.width / this.canvas.offsetWidth * x;
         const positionY = this.height / this.canvas.offsetHeight * y;
@@ -156,7 +160,11 @@ export default class Slide {
                     imageData.data[i] = this.pattern.data[y][x];
                 }
             } catch(err){
+<<<<<<< HEAD
                 //console.log(err, i, x, y, this.pattern.data);
+=======
+                console.log(err, i, x, y);
+>>>>>>> 0f3995baa0958f47378cb6bb0e68ed2d95f30d64
             }
         }
     
