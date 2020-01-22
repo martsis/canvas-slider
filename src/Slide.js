@@ -97,8 +97,11 @@ export default class Slide {
             if (this.hover || this.drawn){
                 window.addEventListener('mousemove', e => {
                     if (this.drawn && !this._mouseDownState) return;
-                    this.draw(e.pageX - window.scrollX - this.canvas.getBoundingClientRect().x,
-                        e.pageY - window.scrollY - this.canvas.getBoundingClientRect().y);
+                    const x = e.pageX - window.scrollX - this.canvas.getBoundingClientRect().x;
+                    const y = e.pageY - window.scrollY - this.canvas.getBoundingClientRect().y;
+
+                    //console.log(x, y)
+                    this.draw(x, y);
                 });
             }
             this.canvas.addEventListener('mousedown', e => {
@@ -124,12 +127,19 @@ export default class Slide {
     }
 
     draw(x, y){
+        if (x < -(this.pattern.width / 2) ||
+            x > (this.width + this.pattern.width / 2) ||
+            y < -(this.pattern.height / 2) ||
+            y > (this.height + this.pattern.height / 2)) return;
+        
         const positionX = this.width / this.canvas.offsetWidth * x;
         const positionY = this.height / this.canvas.offsetHeight * y;
         
         const imageDataX = positionX - this.pattern.width / 2;
         const imageDataY = positionY - this.pattern.height / 2;
         const imageData = this._ctx.getImageData(imageDataX, imageDataY, this.pattern.width, this.pattern.height);
+
+        console.log( this.pattern.width, this.pattern.height, imageData.data.length / 4 / 100);
         
         let count = 0;
     
@@ -138,13 +148,15 @@ export default class Slide {
             const y = (count - count % this.pattern.height) / this.pattern.width;
             
             count++;
+
+            if (y == 100) console.log('azaza')
     
             try{
                 if (imageData.data[i] && imageData.data[i] > this.pattern.data[y][x]){
                     imageData.data[i] = this.pattern.data[y][x];
                 }
             } catch(err){
-                console.log(err, imageData, this.pattern, i);
+                //console.log(err, i, x, y, this.pattern.data);
             }
         }
     
