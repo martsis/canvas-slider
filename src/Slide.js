@@ -139,10 +139,13 @@ export default class Slide {
             
             count++;
     
-            if (imageData.data[i] > this.pattern.data[y][x]){
-                imageData.data[i] = this.pattern.data[y][x];
+            try{
+                if (imageData.data[i] > this.pattern.data[y][x]){
+                    imageData.data[i] = this.pattern.data[y][x];
+                }
+            } catch(err){
+                console.log(err, imageData, this.pattern, i);
             }
-    
         }
     
         this._ctx.putImageData(imageData, imageDataX, imageDataY);
