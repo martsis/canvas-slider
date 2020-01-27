@@ -181,8 +181,10 @@ export default class CanvasSlider{
         if (!this.loop && this.currentIndex <= 0) return;
         if (this.onPrev) this.onPrev();
         if (!this.loop) {
-            this.nextBtn.classList.remove('button-disabled');
-            this.nextBtn.removeAttribute('disabled');
+            if (this.nextBtn){
+                this.nextBtn.classList.remove('button-disabled');
+                this.nextBtn.removeAttribute('disabled');
+            }
         }
 
         this._prevStart();
