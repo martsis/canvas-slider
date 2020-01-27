@@ -194,8 +194,10 @@ export default class CanvasSlider{
         this._nextIndex++;
 
         if (!this.loop && this._nextIndex >= this.slides.length - 1){
-            this.nextBtn.classList.add('button-disabled');
-            this.nextBtn.setAttribute('disabled', 'disabled');
+            if (this.nextBtn){
+                this.nextBtn.classList.add('button-disabled');
+                this.nextBtn.setAttribute('disabled', 'disabled');
+            }
         }
     
         if (this._nextIndex >= this.slides.length){
@@ -210,8 +212,10 @@ export default class CanvasSlider{
         this._nextIndex--;
 
         if (!this.loop && this._nextIndex <= 0){
-            this.prevBtn.classList.add('button-disabledd');
-            this.prevBtn.setAttribute('disabled', 'disabled');
+            if (this.prevBtn){
+                this.prevBtn.classList.add('button-disabledd');
+                this.prevBtn.setAttribute('disabled', 'disabled');
+            }
         }
     
         if (this._nextIndex < 0){
