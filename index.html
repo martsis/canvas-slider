@@ -26,6 +26,9 @@
     <script type="module">
         import CanvasSlider from './src/canvas-slider.js';
         import Slide from './src/Slide.js';
+
+        
+
         const sliderColor = {
             container: '#slideshowColor',
             nextBtn: '#next',
@@ -58,9 +61,9 @@
             document.querySelector('#load').addEventListener('click', e => {
                 e.preventDefault();
 
-                const colorCanvasSlider = new CanvasSlider(sliderColor);
             })
-
+            
+            const colorCanvasSlider = new CanvasSlider(sliderColor);
 
             
             const bg = new Image(680, 880);

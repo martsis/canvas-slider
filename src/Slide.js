@@ -138,8 +138,6 @@ export default class Slide {
         const imageDataX = positionX - this.pattern.width / 2;
         const imageDataY = positionY - this.pattern.height / 2;
         const imageData = this._ctx.getImageData(imageDataX, imageDataY, this.pattern.width, this.pattern.height);
-
-        console.log( this.pattern.width, this.pattern.height, imageData.data.length / 4 / 100);
         
         let count = 0;
     

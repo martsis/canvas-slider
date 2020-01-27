@@ -253,42 +253,52 @@ export default class CanvasSlider{
         let iteration = 0;
         this.animating = true;
         
-        const updateCanvas = setInterval(() => {
-            if (iteration > slide.width / this._pattern.width * 2){
-                clearInterval(updateCanvas);
+        if (window.innerWidth < 768){
+            this.animating = false;
 
-                this.animating = false;
-
-                if (typeof prev == 'undefined'){
-                    this._nextFinish();
-                } else {
-                    this._prevFinish();
+            if (typeof prev == 'undefined'){
+                this._nextFinish();
+            } else {
+                this._prevFinish();
+            }
+        } else {
+            const updateCanvas = setInterval(() => {
+                if (iteration > slide.width / this._pattern.width * 2){
+                    clearInterval(updateCanvas);
+    
+                    this.animating = false;
+    
+                    if (typeof prev == 'undefined'){
+                        this._nextFinish();
+                    } else {
+                        this._prevFinish();
+                    }
                 }
-            }
-            
-            slide.draw(intervalX / (this.width / slide.canvas.offsetWidth), intervalY / (this.height / slide.canvas.offsetHeight));
-
-            if (direction == "down" && (intervalY > slide.height + radius || intervalX > slide.width + this._pattern.width)){
-                intervalX -= this._pattern.width - this._pattern.blur * 2;
-                direction = 'up';
-                iteration++;
-            }
+                
+                slide.draw(intervalX / (this.width / slide.canvas.offsetWidth), intervalY / (this.height / slide.canvas.offsetHeight));
     
-            if (direction == "up" && (intervalY < -radius || intervalX < 0)) {
-                intervalX -= this._pattern.width - this._pattern.blur * 2;
-                direction = 'down';
-                iteration++;
-            }
-    
-            if (direction == "down"){
-                intervalY += slide.height / 20;
-                intervalX += slide.width / 20;
-            } 
-    
-            if (direction == "up") {
-                intervalY -= slide.height / 20;
-                intervalX -= slide.width / 20;
-            }
-        }, 1000/60);
+                if (direction == "down" && (intervalY > slide.height + radius || intervalX > slide.width + this._pattern.width)){
+                    intervalX -= this._pattern.width - this._pattern.blur * 2;
+                    direction = 'up';
+                    iteration++;
+                }
+        
+                if (direction == "up" && (intervalY < -radius || intervalX < 0)) {
+                    intervalX -= this._pattern.width - this._pattern.blur * 2;
+                    direction = 'down';
+                    iteration++;
+                }
+        
+                if (direction == "down"){
+                    intervalY += slide.height / 20;
+                    intervalX += slide.width / 20;
+                } 
+        
+                if (direction == "up") {
+                    intervalY -= slide.height / 20;
+                    intervalX -= slide.width / 20;
+                }
+            }, 1000/60);
+        }
     }
 }
