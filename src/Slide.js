@@ -148,8 +148,6 @@ export default class Slide {
             const y = (count - count % this.pattern.height) / this.pattern.width;
             
             count++;
-
-            if (y == 100) console.log('azaza')
     
             try{
                 if (imageData.data[i] && imageData.data[i] > this.pattern.data[y][x]){
